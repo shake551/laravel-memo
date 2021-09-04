@@ -66,4 +66,14 @@ class HomeController extends Controller
 
         return redirect( route('home') );
     }
+
+    public function destroy(Request $request)
+    {
+        $posts = $request->all(); // リクエスト全てとる
+
+        Memo::where('id', $posts['memo_id'])
+            ->update(['deleted_at' => date('Y-m-d H:i:s', time())]);
+
+        return redirect( route('home') );
+    }
 }
