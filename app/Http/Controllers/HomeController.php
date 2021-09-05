@@ -38,6 +38,7 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         $posts = $request->all(); // リクエスト全てとる
+        $request->validate([ 'content' => 'required']); // htmlのnameと同じ名前で指定
 
         // トランザクション開始
         DB::transaction(function() use($posts) {
@@ -89,6 +90,7 @@ class HomeController extends Controller
     public function update(Request $request)
     {
         $posts = $request->all(); // リクエスト全てとる
+        $request->validate([ 'content' => 'required']); // htmlのnameと同じ名前で指定
 
         // トランザクション開始
         DB::transaction(function () use ($posts){

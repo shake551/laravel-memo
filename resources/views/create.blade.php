@@ -6,6 +6,9 @@
     <!-- route('store') == '/store' -->
     <form class="card-body" action="{{ route('store') }}" method="POST">
         @csrf
+        @error('content')
+            <div class="alert alert-danger">メモ内容を入力してください</div>
+        @enderror
         <div class="form-group">
             <textarea class="form-control" name="content" rows="3" placeholder="ここにメモを入力"></textarea>
         </div>
