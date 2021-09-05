@@ -50,7 +50,8 @@ class HomeController extends Controller
         DB::transaction(function() use($posts) {
             // メモIDをインサートして取得
             $memo_id = Memo::insertGetId(['content' => $posts['content'], 'user_id' => \Auth::id()]);
-            $tag_exits = Tag::where('user_id', '=', \Auth::id())->where('name', '=', $posts['new_tag'])
+            $tag_exits = Tag::where('user_id', '=', \Auth::id())
+                ->where('name', '=', $posts['new_tag'])
                 ->exists();
             // 新規タグが入力されているか
             // タグ名が既に登録されていないか
@@ -103,8 +104,32 @@ class HomeController extends Controller
     {
         $posts = $request->all(); // リクエスト全てとる
 
-        Memo::where('id', $posts['memo_id'])
-            ->update(['content' => $posts['content']]);
+        // トランザクション開始
+        DB::transaction(function () use ($posts){
+            // メモの内容を更新
+            Memo::where('id', $posts['memo_id'])
+                ->update(['content' => $posts['content']]);
+            // メモとタグの紐付けを削除
+            MemoTag::where('memo_id', $posts['memo_id'])
+                ->delete();
+            // 再度メモとタグの紐付け
+            foreach ($posts['tags'] as $tag){
+                MemoTag::insert(['memo_id' => $posts['memo_id'], 'tag_id' => $tag]);
+            }
+            // 新規タグが入力されているか
+            // タグ名が既に登録されていないか
+            $tag_exits = Tag::where('user_id', '=', \Auth::id())
+                ->where('name', '=', $posts['new_tag'])
+                ->exists();
+            if (!empty($posts['new_tag']) && !$tag_exits){
+                // tagsテーブルにインサートしてIDを取得
+                $tag_id = Tag::insertGetId(['user_id' => \Auth::id(), 'name' => $posts['new_tag']]);
+                // memo_tagsにインサートしてメモとタグを紐付ける
+                MemoTag::insert(['memo_id' => $posts['memo_id'], 'tag_id' => $tag_id]);
+            }
+        });
+        // トランザクション終了
+
 
         return redirect( route('home') );
     }
