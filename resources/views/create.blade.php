@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-header">新規メモ作成</div>
     <!-- route('store') == '/store' -->
-    <form class="card-body" action="{{ route('store') }}" method="POST">
+    <form class="card-body my-card-body" action="{{ route('store') }}" method="POST">
         @csrf
         @error('content')
             <div class="alert alert-danger">メモ内容を入力してください</div>

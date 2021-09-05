@@ -20,6 +20,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/css/layout.css">
 
 </head>
 <body>
@@ -83,8 +84,8 @@
             <div class="col-md-2 p-0">
               <div class="card">
                 <div class="card-header">タグ一覧</div>
-                <div class="card-body">
-                  <a href="/" class="card-text d-block">
+                <div class="card-body my-card-body">
+                  <a href="/" class="card-text d-block elipsis mb-2">
                     全て表示
                   </a>
                   @foreach($tags as $tag)
@@ -97,15 +98,15 @@
             </div>
             <div class="col-md-4 p-0">
               <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                   メモ一覧
                   <a href="{{ route('home') }}">
                     <i class="fas fa-plus-circle"></i>
                   </a>
                 </div>
-                <div class="card-body">
+                <div class="card-body my-card-body">
                   @foreach($memos as $memo)
-                    <a href="/edit/{{$memo['id']}}" class="card-text d-block">
+                    <a href="/edit/{{$memo['id']}}" class="card-text d-block elipsis mb-2">
                       {{ $memo['content'] }}
                     </a>
                   @endforeach
